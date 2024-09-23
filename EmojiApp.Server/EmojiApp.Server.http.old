@@ -1,0 +1,6 @@
+@EmojiApp.Server_HostAddress = http://localhost:5209
+
+GET {{EmojiApp.Server_HostAddress}}/emojiHub/
+Accept: application/json
+
+###
