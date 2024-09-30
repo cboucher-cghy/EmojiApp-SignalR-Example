@@ -27,12 +27,12 @@
         { name: '👍', likes: 0 }
     ]);
 
+    let startedPromise = null
+    let manuallyClosed = false
     let connection;
 
     onMounted(() => {
-        connection = new signalR.HubConnectionBuilder()
-            .withUrl('https://localhost:7222/emojiHub')
-            .build();
+
 
         // Receives the initial list of emojis and their likes
         connection.on('ReceiveInitialLikes', (initialEmojis) => {
@@ -47,7 +47,14 @@
             }
         });
 
-        connection.start().catch(err => console.error(err));
+        // Connexion standard
+        // connection.start().catch(err => console.error(err));
+
+        // Auto-reconnexion en cas de déconnexion par le serveur...
+        connection.onclose(() => {
+            if (!manuallyClosed) start()
+        })
+
     });
 
     const likeEmoji = async (emojiName) => {
@@ -55,6 +62,23 @@
             await connection.invoke('LikeEmoji', emojiName);
         }
     };
+
+    function start() {
+        connection = new signalR.HubConnectionBuilder()
+            .withUrl('https://localhost:7222/emojiHub')
+            .build();
+
+        startedPromise = connection.start()
+            .catch(err => {
+                console.error('Failed to connect with hub', err)
+                return new Promise((resolve, reject) => setTimeout(() => start().then(resolve).catch(reject), 5000))
+            })
+        return startedPromise
+    }
+
+    // Tentative de connexion avec reconnexion
+    manuallyClosed = false
+    start()
 </script>
 
 <style>
