@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace EmojiApp.Server.Hubs
 {
+    // [Authorize] // Pour gérer l'accès aux utilisateurs authentifiés
     public class EmojiHub : Hub
     {
         private static readonly Dictionary<string, Emoji> EmojiLikes = new Dictionary<string, Emoji>
@@ -32,6 +33,7 @@ namespace EmojiApp.Server.Hubs
             }
         }
 
+        // [Authorize] // Pour gérer l'accès aux utilisateurs authentifiés
         public async Task LikeEmoji(string emojiName)
         {
             // if (EmojiLikes.TryGetValue(emojiName, out Emoji? value))
