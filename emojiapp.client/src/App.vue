@@ -64,8 +64,17 @@
     };
 
     function start() {
+        //var url = "https://localhost:7222/emojiHub"
+        //var url = "https://sqlinfocg.cegepgranby.qc.ca/cboucher"
+        var endpoint = "/emojiHub"
+        var url = `${import.meta.env.VITE_BASE_URL}${import.meta.env.BASE_URL}${endpoint}`
+        console.log("VITE base url: " + import.meta.env.VITE_BASE_URL)
+        console.log("Base url: " + import.meta.env.BASE_URL)
+        console.log("Endpoint: " + endpoint)
+        console.log("Complete URL: " + url)
+
         connection = new signalR.HubConnectionBuilder()
-            .withUrl('https://localhost:7222/emojiHub')
+            .withUrl(url)
             .build();
 
         startedPromise = connection.start()
