@@ -31,6 +31,14 @@ namespace EmojiApp.Server.Hubs
                 // Notifies all connected clients of the new emoji
                 await Clients.All.SendAsync("NewEmoji", emoji);
             }
+
+            // Pour envoyer un message spécifiquement à une personne, il faut trouver l'utilisateur selon son Id depuis la liste des Clients.
+            // On peut récupérer le UserId depuis la classe UserManager 
+            // var userId = userManager.FindByNameAsync("username").Result.Id; // Exemple pour récupérer l'Id d'un utilisateur
+            //
+            // await Clients.User(userId).SendAsync("NewEmoji", emoji);
+
+
         }
 
         // [Authorize] // Pour gérer l'accès aux utilisateurs authentifiés

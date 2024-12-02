@@ -63,7 +63,7 @@
         }
     };
 
-    function start() {
+    async function start() {
         //var url = "https://localhost:7222/emojiHub"
         //var url = "https://sqlinfocg.cegepgranby.qc.ca/cboucher"
         var endpoint = "/emojiHub"
@@ -75,6 +75,7 @@
 
         connection = new signalR.HubConnectionBuilder()
             .withUrl(url)
+            .withAutomaticReconnect()
             .build();
 
         startedPromise = connection.start()
@@ -82,7 +83,7 @@
                 console.error('Failed to connect with hub', err)
                 return new Promise((resolve, reject) => setTimeout(() => start().then(resolve).catch(reject), 5000))
             })
-        return startedPromise
+        return await startedPromise
     }
 
     // Tentative de connexion avec reconnexion
